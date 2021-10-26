@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres
+    container_name: tatakaeDB
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tatakae
+    volumes:
+      - pgdata:/data/postgres
+    networks:
+      - database
+volumes:
+  pgdata:
+    driver: local
+networks:
+  database:
+    external: true
