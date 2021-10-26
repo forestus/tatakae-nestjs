@@ -40,6 +40,9 @@
     }
   },
   "compilerOptions": {
-    "webpack": true
+    "webpack": true,
+    "plugins": [
+      "@nestjs/swagger/plugin"
+    ]
   }
 }

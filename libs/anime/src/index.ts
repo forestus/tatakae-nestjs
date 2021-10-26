@@ -1,2 +1,3 @@
 export * from './anime.module';
-export * from './anime.service';
+export * from './routes/create/anime.service';
+export * from './routes/create/anime.controller';
