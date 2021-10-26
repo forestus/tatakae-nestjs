@@ -1,9 +1,23 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@anime/anime/(.*)": "<rootDir>/../libs/anime/src/$1",
+    "@anime/anime": "<rootDir>/../libs/anime/src",
+    "@torrent/torrent/(.*)": "<rootDir>/../libs/torrent/src/$1",
+    "@torrent/torrent": "<rootDir>/../libs/torrent/src",
+    "@description/description/(.*)": "<rootDir>/../libs/description/src/$1",
+    "@description/description": "<rootDir>/../libs/description/src",
+    "@video/video/(.*)": "<rootDir>/../libs/video/src/$1",
+    "@video/video": "<rootDir>/../libs/video/src"
   }
 }

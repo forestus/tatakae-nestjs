@@ -1,4 +1,45 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "projects": {
+    "anime": {
+      "type": "library",
+      "root": "libs/anime",
+      "entryFile": "index",
+      "sourceRoot": "libs/anime/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/anime/tsconfig.lib.json"
+      }
+    },
+    "torrent": {
+      "type": "library",
+      "root": "libs/torrent",
+      "entryFile": "index",
+      "sourceRoot": "libs/torrent/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/torrent/tsconfig.lib.json"
+      }
+    },
+    "description": {
+      "type": "library",
+      "root": "libs/description",
+      "entryFile": "index",
+      "sourceRoot": "libs/description/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/description/tsconfig.lib.json"
+      }
+    },
+    "video": {
+      "type": "library",
+      "root": "libs/video",
+      "entryFile": "index",
+      "sourceRoot": "libs/video/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/video/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
 }

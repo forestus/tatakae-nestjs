@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@anime/anime": [
+        "libs/anime/src"
+      ],
+      "@anime/anime/*": [
+        "libs/anime/src/*"
+      ],
+      "@torrent/torrent": [
+        "libs/torrent/src"
+      ],
+      "@torrent/torrent/*": [
+        "libs/torrent/src/*"
+      ],
+      "@description/description": [
+        "libs/description/src"
+      ],
+      "@description/description/*": [
+        "libs/description/src/*"
+      ],
+      "@video/video": [
+        "libs/video/src"
+      ],
+      "@video/video/*": [
+        "libs/video/src/*"
+      ]
+    }
   }
 }
