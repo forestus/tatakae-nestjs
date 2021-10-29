@@ -11,7 +11,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strictNullChecks": false,
@@ -44,6 +43,12 @@
       ],
       "@video/video/*": [
         "libs/video/src/*"
+      ],
+      "@shared/shared": [
+        "libs/shared/src"
+      ],
+      "@shared/shared/*": [
+        "libs/shared/src/*"
       ]
     }
   }

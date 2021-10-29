@@ -1,13 +1,17 @@
 import { AnimeModule } from '@anime/anime';
+import { DescriptionModule } from '@description/description';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TorrentModule } from '@torrent/torrent';
 import { getMetadataArgsStorage } from 'typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     AnimeModule,
+    DescriptionModule,
+    TorrentModule,
     TypeOrmModule.forRoot({
       type: process.env.TYPEORM_CONNECTION,
       host: process.env.TYPEORM_HOST,

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateAnimeService } from './anime.service';
+import { CreateAnimeService } from './create-anime.service';
 
 describe('CreateAnimeService', () => {
   let service: CreateAnimeService;

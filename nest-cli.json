@@ -37,6 +37,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/video/tsconfig.lib.json"
       }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
     }
   },
   "compilerOptions": {

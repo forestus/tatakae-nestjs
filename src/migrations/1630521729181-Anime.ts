@@ -2,9 +2,10 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Anime1630521729181 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.createTable(
       new Table({
-        name: 'papers',
+        name: 'anime',
         columns: [
           {
             name: 'id',
