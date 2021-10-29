@@ -1,11 +1,12 @@
+import { AnimeEntity } from '@anime/anime/entities/anime.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  // OneToOne,
+  OneToOne,
+  UpdateDateColumn,
 } from 'typeorm';
-// import { Anime } from './Anime';
 
 @Entity('descriptions')
 export class DescriptionEntity {
@@ -36,9 +37,12 @@ export class DescriptionEntity {
   @Column()
   synopsys: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @OneToOne(() => AnimeEntity, (anime) => anime.description)
+  anime: AnimeEntity;
 
-  // @OneToOne(() => Anime, (anime) => anime.description)
-  // anime: Anime;
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

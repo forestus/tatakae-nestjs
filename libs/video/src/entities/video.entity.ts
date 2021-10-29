@@ -1,11 +1,12 @@
+import { AnimeEntity } from '@anime/anime/entities/anime.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  // ManyToOne,
+  ManyToOne,
+  UpdateDateColumn,
 } from 'typeorm';
-// import { Anime } from './Anime';
 
 @Entity('videos')
 export class VideoEntity {
@@ -18,9 +19,12 @@ export class VideoEntity {
   @Column()
   link: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @ManyToOne(() => AnimeEntity, (anime) => anime.videos)
+  anime: AnimeEntity;
 
-  // @ManyToOne(() => Anime, (anime) => anime.videos)
-  // anime: Anime;
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

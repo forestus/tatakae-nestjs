@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Anime1630521729181 implements MigrationInterface {
+export class Torrent1635542338688 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.createTable(
       new Table({
-        name: 'anime',
+        name: 'torrent',
         columns: [
           {
             name: 'id',
@@ -15,7 +14,7 @@ export class Anime1630521729181 implements MigrationInterface {
           },
           { name: 'name', type: 'varchar' },
           { name: 'link', type: 'varchar' },
-          { name: 'description_id', type: 'uuid' },
+          { name: 'anime_id', type: 'uuid' },
           { name: 'created_at', type: 'timestamp', default: 'now()' },
           {
             name: 'updated_at',
@@ -23,11 +22,21 @@ export class Anime1630521729181 implements MigrationInterface {
             isNullable: true,
           },
         ],
+        foreignKeys: [
+          {
+            name: 'FKTorrentAnime',
+            referencedTableName: 'anime',
+            referencedColumnNames: ['id'],
+            columnNames: ['anime_id'],
+            onDelete: 'SET NULL',
+            onUpdate: 'SET NULL',
+          },
+        ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('anime');
+    await queryRunner.dropTable('torrent');
   }
 }

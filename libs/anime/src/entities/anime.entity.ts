@@ -1,9 +1,15 @@
+import { DescriptionEntity } from '@description/description/entities/description.entity';
+import { TorrentEntity } from '@torrent/torrent/entities/torrent.entity';
+import { VideoEntity } from '@video/video/entities/video.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity('anime')
@@ -23,13 +29,13 @@ export class AnimeEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  // @OneToMany(() => Torrent, (torrent) => torrent.anime)
-  // torrents: Torrent[];
+  @OneToMany(() => TorrentEntity, (torrent) => torrent.anime)
+  torrents: TorrentEntity[];
 
-  // @OneToMany(() => Video, (video) => video.anime)
-  // videos: Video[];
+  @OneToMany(() => VideoEntity, (video) => video.anime)
+  videos: VideoEntity[];
 
-  // @OneToOne(() => Description)
-  // @JoinColumn()
-  // description: Description;
+  @OneToOne(() => DescriptionEntity)
+  @JoinColumn()
+  description: DescriptionEntity;
 }
