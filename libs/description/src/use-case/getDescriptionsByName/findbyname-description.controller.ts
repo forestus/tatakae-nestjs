@@ -2,13 +2,20 @@ import { DescriptionEntity } from '@description/description/entities/description
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ValidationResponseError } from '@shared/shared/swagger/validation';
-import { FindByNameDescriptionService } from './findbyname-description.service';
-
+import { IsNumberString, IsOptional, IsString } from 'class-validator';
+import { GetDescriptionByNameService } from './findbyname-description.service';
+class CreateParams {
+  @IsString()
+  name: string;
+  @IsOptional()
+  @IsNumberString()
+  max?: number;
+}
 @ApiTags('Description')
 @Controller()
-export class FindByNameDescriptionController {
+export class GetDescriptionByNameController {
   constructor(
-    private findByNameDescriptionService: FindByNameDescriptionService,
+    private getDescriptionByNameService: GetDescriptionByNameService,
   ) {}
   @ApiOperation({ summary: 'Criação de Description' })
   @ApiResponse({
@@ -16,11 +23,11 @@ export class FindByNameDescriptionController {
     description: 'Erros de Validação',
     type: ValidationResponseError,
   })
-  @Get('description/:name')
-  create(
-    @Param('name')
-    name: string,
+  @Get('descriptions/search/:name/:max?')
+  async create(
+    @Param()
+    { name, max }: CreateParams,
   ): Promise<DescriptionEntity[]> {
-    return this.findByNameDescriptionService.findByName(name);
+    return this.getDescriptionByNameService.findByName(name, max);
   }
 }

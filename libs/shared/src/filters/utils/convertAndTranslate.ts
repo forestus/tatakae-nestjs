@@ -26,59 +26,60 @@ export function convertAndTranslate(errors: any, lng: string) {
   });
 
   errors.map((error) => {
-    error.children
-      .map((children) => {
-        if (children.children.length) {
-          return children.children
-            .map((child) => ({
-              propety: child.property,
-              constraint: translate(child, lng)
-                .map((t) => t.constraint)
-                .filter((el) => el != null),
-              translate: translate(child, lng)
-                .map((t) => t.translate)
-                .filter((el) => el != null),
-            }))
-            .map((typeError) => {
-              typeError.translate = Object.values(typeError.translate);
-              return typeError;
-            })
-            .map(
-              (err) =>
-                `${error.property}.${children.property}.${err.propety}:${
-                  err.constraint
+    error.children &&
+      error.children
+        .map((children) => {
+          if (children.children.length) {
+            return children.children
+              .map((child) => ({
+                propety: child.property,
+                constraint: translate(child, lng)
+                  .map((t) => t.constraint)
+                  .filter((el) => el != null),
+                translate: translate(child, lng)
+                  .map((t) => t.translate)
+                  .filter((el) => el != null),
+              }))
+              .map((typeError) => {
+                typeError.translate = Object.values(typeError.translate);
+                return typeError;
+              })
+              .map(
+                (err) =>
+                  `${error.property}.${children.property}.${err.propety}:${
+                    err.constraint
+                  }:${translateGlobal(
+                    err.propety,
+                    lng,
+                    'fields',
+                  )} de ${translateGlobal(error.property, lng, 'fields')} ${
+                    err.translate
+                  }`,
+              );
+          }
+          if (children.constraints) {
+            return translate(children, lng).map((t) => {
+              if (t.translate) {
+                return `${error.property}.${children.property}:${
+                  t.constraint
                 }:${translateGlobal(
-                  err.propety,
+                  children.property,
                   lng,
                   'fields',
                 )} de ${translateGlobal(error.property, lng, 'fields')} ${
-                  err.translate
-                }`,
-            );
-        }
-        if (children.constraints) {
-          return translate(children, lng).map((t) => {
-            if (t.translate) {
-              return `${error.property}.${children.property}:${
-                t.constraint
-              }:${translateGlobal(
-                children.property,
-                lng,
-                'fields',
-              )} de ${translateGlobal(error.property, lng, 'fields')} ${
-                t.translate
-              }`;
-            }
-            return t;
-          });
-        }
-      })
-      .map((error) =>
-        error.map((message) => {
-          validationErrors.push(message);
-          return validationErrors;
-        }),
-      );
+                  t.translate
+                }`;
+              }
+              return t;
+            });
+          }
+        })
+        .map((error) =>
+          error.map((message) => {
+            validationErrors.push(message);
+            return validationErrors;
+          }),
+        );
     return validationErrors;
   });
   validationErrors.map((validationError) => {

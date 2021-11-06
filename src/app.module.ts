@@ -2,16 +2,20 @@ import { AnimeModule } from '@anime/anime';
 import { DescriptionModule } from '@description/description';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TorrentModule } from '@torrent/torrent';
+import { VideoModule } from '@video/video';
 import { getMetadataArgsStorage } from 'typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    EventEmitterModule.forRoot(),
     AnimeModule,
     DescriptionModule,
     TorrentModule,
+    VideoModule,
     TypeOrmModule.forRoot({
       type: process.env.TYPEORM_CONNECTION,
       host: process.env.TYPEORM_HOST,

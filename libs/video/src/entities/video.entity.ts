@@ -6,9 +6,10 @@ import {
   CreateDateColumn,
   ManyToOne,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 
-@Entity('videos')
+@Entity('video')
 export class VideoEntity {
   @PrimaryGeneratedColumn()
   readonly id: string;
@@ -19,7 +20,11 @@ export class VideoEntity {
   @Column()
   link: string;
 
+  @Column()
+  anime_id: string;
+
   @ManyToOne(() => AnimeEntity, (anime) => anime.videos)
+  @JoinColumn({ name: 'anime_id' })
   anime: AnimeEntity;
 
   @CreateDateColumn()
