@@ -1,7 +1,6 @@
-import { CreateVideoDTO } from '@video/video/dto/create-video.dto';
 import { BodyRequest } from '@video/video/swagger/request/body-request';
 import { ApiOkResponseTypes } from '@video/video/swagger/responses/api-ok-response.swagger';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -13,7 +12,10 @@ import {
 import { NotFoundResponseError } from '@shared/shared/swagger/not-found';
 import { ValidationResponseError } from '@shared/shared/swagger/validation';
 import { DownloadVideoService } from './download-video.service';
-
+export interface IDownload {
+  anime: string;
+  torrent: string;
+}
 @ApiTags('Video')
 @Controller()
 export class DownloadVideoController {
@@ -36,9 +38,7 @@ export class DownloadVideoController {
     type: BodyRequest,
   })
   @Post('video/downloader')
-  create(): // @Body() video: CreateVideoDTO
-  void {
-    console.log('chegou aqui1');
-    return this.createVideoService.create({});
+  create(@Body() teste: IDownload): void {
+    return this.createVideoService.create(teste);
   }
 }

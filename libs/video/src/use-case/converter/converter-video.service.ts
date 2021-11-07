@@ -3,8 +3,8 @@ import { IVideoRepository } from '@video/video/repositories/interfaces/video-rep
 import { Inject, Injectable } from '@nestjs/common';
 import path from 'path';
 import { spawn } from 'handbrake-js';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { rename } from 'fs';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { unlink } from 'fs';
 export interface IEncode {
   videoPath?: string;
   anime?: string;
@@ -17,13 +17,8 @@ export class ConverterVideoService {
     private videoRepository: IVideoRepository,
     private eventEmitter: EventEmitter2,
   ) {}
-
+  @OnEvent('video-downloaded')
   create({ anime, videoName, videoPath }: IEncode): void {
-    // converter para ./ e depois mover para path final no /anime
-    anime =
-      '[Erai-raws] 100-man no Inochi no Ue ni Ore wa Tatte Iru - 11 [720p][Multiple Subtitle].mkv';
-    videoName =
-      '[Erai-raws] 100-man no Inochi no Ue ni Ore wa Tatte Iru - 11 [720p][Multiple Subtitle].mkv';
     let baseVideoPath;
     const output =
       videoName &&
@@ -33,11 +28,9 @@ export class ConverterVideoService {
         .replace('[Erai-raws] ', '')}.mp4`;
     if (!videoPath) {
       baseVideoPath = path.resolve(
-        __dirname + `../../../../../../../data/videos/${anime}/${videoName}`,
+        __dirname + `../../../../../../../data/videos/${anime}`,
       );
     }
-    console.log(videoName);
-    console.log(output);
     const encode = spawn({
       input: videoPath || baseVideoPath,
       output: `./data/videos/${anime}/${output}`,
@@ -64,19 +57,17 @@ export class ConverterVideoService {
     });
     encode.on('end', async () => {
       console.log('Encoding Completed!');
-      // rename(
-      //   output,
-      //   path.join(__dirname + `../../../data/videos/${anime}/${output}`),
-      //   (err) => {
-      //     if (err) throw err;
-      //     console.log('Rename complete!');
-      //   },
-      // );
+      const finalVideoPath = baseVideoPath + `/${videoName}`;
+      unlink(path.resolve(finalVideoPath), (err) => {
+        if (err) throw err;
+        console.log(`Deleted: ${finalVideoPath}`);
+      });
+      // emite o evento que irá chamar o uploader
       this.eventEmitter.emit('video-converted', {
         anime,
-        videoName,
-        videoPath,
-      }); // emite o evento que irá chamar o uploader
+        videoName: output,
+        videoPath: finalVideoPath,
+      } as IEncode);
     });
   }
 }

@@ -6,6 +6,7 @@ import parseTorrent, { toMagnetURI } from 'parse-torrent';
 import WebTorrent from 'webtorrent';
 import path from 'path';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IEncode } from '../converter/converter-video.service';
 
 const client = new WebTorrent();
 interface IDownloadVideo {
@@ -20,37 +21,46 @@ export class DownloadVideoService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  create({}: IDownloadVideo): void {
-    console.log('chegou aqui2');
-    // /${anime}/${videoName}
+  create({ anime, torrent }: IDownloadVideo): void {
     // fazer verificação se anime ja foi baixado
-    // deve receber a referencia do video baixado e passar no emit para pegar no listener
-    const torrentPath = path.resolve('data/torrents');
+    const torrentPath = path.resolve(`data/torrents/${anime}/${torrent}`);
     const videoPath = path.resolve('data/videos');
-    const files = fs.readdirSync(torrentPath);
-    files.map((file) => {
-      const torrentId = toMagnetURI(
-        parseTorrent(fs.readFileSync(`${torrentPath}/${file}`)),
-      );
-      client.add(torrentId, (torrent) => {
-        const files = torrent.files;
-        files.map((file) => {
-          console.log('started Download: ' + file.name);
-          const source = file.createReadStream();
-          const dir = `${videoPath}/${torrent.name}`;
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-          }
-          const destinationPath = `${dir}/${file.name}`;
-          const destination = fs.createWriteStream(destinationPath);
-          source
-            .on('end', async () => {
-              console.log('Donwload Finished:\t', file.name);
-              this.eventEmitter.emit('video-downloaded', file); // emite o evento que irá chamar o converter
-              return Promise.resolve(file);
-            })
-            .pipe(destination);
-        });
+    // const singleTorrent = fs.readdirSync(torrentPath);
+    const torrentId = toMagnetURI(parseTorrent(fs.readFileSync(torrentPath)));
+    const torrentCliente = client.add(torrentId, (torrent) => {
+      const files = torrent.files;
+      files.map((file) => {
+        const name = file.name
+          .replace('[Erai-raws] ', '')
+          .replace('[Multiple Subtitle]', '')
+          .trim();
+        // const tName = torrent.name
+        //   .replace('[Erai-raws] ', '')
+        //   .replace(/(-[^-]+)-?$/, '')
+        //   .trim();
+        const destinationPath = path
+          .resolve(
+            __dirname + `../../../../../../../data/videos/${anime}/${name}`,
+          )
+          .trim();
+        console.log('started Download: ' + name);
+        const source = file.createReadStream();
+        const dir = `${videoPath}/${anime}`;
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+        const destination = fs.createWriteStream(destinationPath);
+        source
+          .on('end', async () => {
+            client.remove(torrentCliente);
+            console.log('Donwload Finished:\t', name);
+            this.eventEmitter.emit('video-downloaded', {
+              anime: anime,
+              videoName: name,
+            } as IEncode); // emite o evento que irá chamar o converter
+            return Promise.resolve(file);
+          })
+          .pipe(destination);
       });
     });
     return;

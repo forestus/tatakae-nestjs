@@ -50,6 +50,8 @@
       "@shared/shared/*": [
         "libs/shared/src/*"
       ]
-    }
-  }
+    },
+  },
+  "exclude": ["data"],
+  "watchOptions": {"excludeFiles": ["data"]}
 }

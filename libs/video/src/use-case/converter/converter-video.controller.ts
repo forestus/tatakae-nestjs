@@ -1,7 +1,6 @@
-import { CreateVideoDTO } from '@video/video/dto/create-video.dto';
 import { BodyRequest } from '@video/video/swagger/request/body-request';
 import { ApiOkResponseTypes } from '@video/video/swagger/responses/api-ok-response.swagger';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
