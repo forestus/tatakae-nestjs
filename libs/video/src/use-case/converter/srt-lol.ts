@@ -1,10 +1,6 @@
-require('dotenv').config();
-
-const { Translate } = require('@google-cloud/translate').v2;
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
 import translateBulks from '@vitalets/google-translate-api';
-const CUSTOM_MESSAGE = 'empty_block';
+const CUSTOM_MESSAGE = 'Tatakae Subs';
 const MAX_SEGMENT_SIZE = 50; // The max number of sentences to translate with single request
 const SOURCE_LANGUAGE = 'en'; // Language to translate from
 const TARGET_LANGUAGE = 'pt'; // Language to translate to
@@ -14,7 +10,6 @@ const REGEX_TIMESTAMP_LINE =
   /^\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}$/;
 
 // Construct clients for storage and translate services
-const translate = new Translate();
 
 const translateSRTFiles = async (pathFile) => {
   // Construct the filename of the output file
@@ -30,7 +25,7 @@ const translateSRTFiles = async (pathFile) => {
     new Promise(function (resolve) {
       setTimeout(function () {
         resolve('I did it');
-      }, 5000);
+      }, 1);
     }),
   ])
     .then(async (lol) => {
@@ -75,7 +70,7 @@ const translateSRTFiles = async (pathFile) => {
             // Create a single array with all translations from the multiple translate requests
             let translations = [];
             results.forEach((segment) => {
-              segment = segment.text.split(/S?s?hakalakabun/g);
+              segment = segment.text.split(/S?s?h?a?kal?a?kabun/g);
               translations = translations.concat(segment);
             });
             // .replace(/\s+(?=[^{\}]*\})/g,'').trim()
@@ -83,8 +78,8 @@ const translateSRTFiles = async (pathFile) => {
             content.requestLines.forEach((position, i) => {
               if (translations[i]) {
                 content.output[position] = translations[i]
-                  .replace(/\s+(?=[^{\}]*\})/g, '')
-                  .replace(/\\\sn?N?/g, '\\N')
+                  .replace(/\s+(?=[^{\}]*\})/g, '') // remove spaces from translate inside {}
+                  .replace(/\\\sn?N?/g, '\\N') // fix commands from translate
                   .trim();
               }
             });
@@ -160,8 +155,8 @@ export function processData(data) {
       // Line ooks like a single number
       // resultData.sentences.push(matches[0]);
       // resultData.output.push(matches[0]);
-      resultData.sentences.push((parseInt(matches[0]) + 1).toString()); // Adding +1 to allow for custom message
-      resultData.output.push((parseInt(matches[0]) + 1).toString());
+      resultData.sentences.push(parseInt(matches[0]).toString()); // Adding +1 to allow for custom message
+      resultData.output.push(parseInt(matches[0]).toString());
       return;
     }
 
@@ -179,7 +174,7 @@ export function processData(data) {
       resultData.output.push('');
       return;
     } else {
-      element = element.replace(/\\N/g, ' \\N ');
+      element = element.replace(/\\N/g, ' \\N '); // fix breacklines commands in text
       // Only other option, a line that needs to be translated
       resultData.sentences.push(element);
       resultData.output.push(element); // default the untranslated string in the output
