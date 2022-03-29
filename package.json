@@ -43,7 +43,7 @@
     "matroska-subtitles": "^3.3.2",
     "morgan": "^1.10.0",
     "node-webvtt": "^1.9.3",
-    "parse-torrent": "^9.1.4",
+    "parse-torrent": "^9.1.5",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
