@@ -63,7 +63,7 @@
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^27.0.1",
     "@types/morgan": "^1.9.3",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.18.115",
     "@types/parse-torrent": "^5.8.4",
     "@types/supertest": "^2.0.11",
     "@types/webtorrent": "^0.109.2",
